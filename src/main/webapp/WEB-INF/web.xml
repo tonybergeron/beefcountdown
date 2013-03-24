@@ -18,6 +18,18 @@
     <servlet-name>hello</servlet-name>
     <url-pattern>/hello</url-pattern>
   </servlet-mapping>
+  
+  
+  	<servlet>
+    	<servlet-name>TestServlet</servlet-name>
+    	<jsp-file>/test.jsp</jsp-file>
+	</servlet>
+
+	<servlet-mapping>
+	    <servlet-name>TestServlet</servlet-name>
+	    <url-pattern>/test/*</url-pattern>
+	</servlet-mapping>
+  
 
 
 </web-app>
