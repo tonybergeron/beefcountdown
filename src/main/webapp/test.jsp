@@ -13,7 +13,7 @@
 			}
 			
 			body {
-				background: url("${pageContext.request.contextPath}/beef-sammich-edited.JPG")  center top fixed;
+				background: url("${pageContext.request.contextPath}/resources/beef-sammich-edited.JPG")  center top fixed;
 				background-size: 100% auto;
 			}
 			
