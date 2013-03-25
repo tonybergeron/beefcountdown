@@ -5,31 +5,29 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     version="2.5">
 
-    <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
-    </welcome-file-list>
-    
-  <servlet>
-    <servlet-name>hello</servlet-name>
-    <servlet-class>com.example.HelloServlet</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>hello</servlet-name>
-    <url-pattern>/hello</url-pattern>
-  </servlet-mapping>
-  
-  
-  	<servlet>
-    	<servlet-name>TestServlet</servlet-name>
-    	<jsp-file>/test.jsp</jsp-file>
+	<welcome-file-list>
+		<welcome-file>beef.jsp</welcome-file>
+	</welcome-file-list>
+	
+	<servlet>
+		<servlet-name>hello</servlet-name>
+		<servlet-class>com.example.HelloServlet</servlet-class>
 	</servlet>
-
+	
 	<servlet-mapping>
-	    <servlet-name>TestServlet</servlet-name>
-	    <url-pattern>/test/*</url-pattern>
+		<servlet-name>hello</servlet-name>
+		<url-pattern>/hello</url-pattern>
 	</servlet-mapping>
-  
-
+	
+	
+	<servlet>
+		<servlet-name>BeefServlet</servlet-name>
+		<jsp-file>/beef.jsp</jsp-file>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>TestServlet</servlet-name>
+		<url-pattern>/beef</url-pattern>
+	</servlet-mapping>
 
 </web-app>
