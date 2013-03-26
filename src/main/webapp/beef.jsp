@@ -6,6 +6,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>Beef Timer</title>
 		
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.compiled.js"></script><![endif]-->
+		
 		<style>
 			
 			#content {
@@ -25,12 +30,6 @@
 				font-size: 25px;
 			}
 		</style>
-		
-		
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
-		
 		
 		<script type="text/javascript">
 			
