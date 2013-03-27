@@ -21,6 +21,25 @@
 			
 			/* Specify the position and layering for the content that needs to appear in front of the background image. Must have a higher z-index value than the background image. Also add some padding to compensate for removing the margin from the 'html' and 'body' tags. */
 			#content {position:relative; z-index:1; padding:10px;}
+			
+			#outer {
+				position: absolute;
+				top: 50%;
+				left: 0px;
+				width: 100%;
+				height: 1px;
+				overflow: visible;
+			}
+			
+			#inner {
+				width: 1025px;
+				height: 300px;
+				margin-left: -525px;  /***  width / 2   ***/
+				position: absolute;
+				top: -150px;          /***  height / 2   ***/
+				left: 50%;
+			}
+			
 		</style>
 		
 		<!-- The above code doesn't work in Internet Explorer 6. To address this, we use a conditional comment to specify an alternative style sheet for IE 6 -->
@@ -36,7 +55,6 @@
 
 		<!-- Style for the Tables -->
 		<style type="text/css">
-			
 			.time-table td {
 				text-align:center;
 			}
@@ -195,6 +213,8 @@
 	<body>
 		<div id="page-background"><img src="${pageContext.request.contextPath}/resources/beef-sammich-edited.JPG" width="100%" height="100%"></div>
 		<div id="content">
+		<div id="outer">
+		<div id="inner">
 			<div  style="margin: 0px auto;text-align:center;">
 				<!--<h1>Time Until Next Beef!</h1>-->
 				<!--<div id="relative"></div>-->
@@ -218,6 +238,8 @@
 				</div>
 				
 			</div>
+		</div>
+		</div>
 		</div>
 
 		<!--
