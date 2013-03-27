@@ -9,18 +9,33 @@
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
-		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.compiled.js"></script><![endif]-->
+		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.js"></script><![endif]-->
 		
-		<style>
+
+		<style type="text/css">
+			/* Remove margins from the 'html' and 'body' tags, and ensure the page takes up full screen height */
+			html, body {height:100%; margin:0; padding:0;}
 			
-			#content {
-				margin-top:100px;
-			}
+			/* Set the position and dimensions of the background image. */
+			#page-background {position:fixed; top:0; left:0; width:100%; height:100%;}
 			
-			body {
-				background: url("${pageContext.request.contextPath}/resources/beef-sammich-edited.JPG")  center top fixed;
-				background-size: 100% auto;
-			}
+			/* Specify the position and layering for the content that needs to appear in front of the background image. Must have a higher z-index value than the background image. Also add some padding to compensate for removing the margin from the 'html' and 'body' tags. */
+			#content {position:relative; z-index:1; padding:10px;}
+		</style>
+		
+		<!-- The above code doesn't work in Internet Explorer 6. To address this, we use a conditional comment to specify an alternative style sheet for IE 6 -->
+		<!--[if IE 6]>
+		<style type="text/css">
+			html {overflow-y:hidden;}
+			body {overflow-y:auto;}
+			#page-background {position:absolute; z-index:-1;}
+			#content {position:static;padding:10px;}
+		</style>
+		<![endif]-->
+
+
+		<!-- Style for the Tables -->
+		<style type="text/css">
 			
 			.time-table td {
 				text-align:center;
@@ -178,6 +193,7 @@
 		
 	</head>
 	<body>
+		<div id="page-background"><img src="${pageContext.request.contextPath}/resources/beef-sammich-edited.JPG" width="100%" height="100%"></div>
 		<div id="content">
 			<div  style="margin: 0px auto;text-align:center;">
 				<!--<h1>Time Until Next Beef!</h1>-->
