@@ -34,9 +34,9 @@
 			#inner {
 				width: 1025px;
 				height: 300px;
-				margin-left: -525px;  /***  width / 2   ***/
+				margin-left: -525px;  /***  width / 2    ***/
 				position: absolute;
-				top: 150px;          /***  height / 2   ***/
+				top: 150px;          /***  height / 2    ***/
 				left: 50%;
 			}
 			
