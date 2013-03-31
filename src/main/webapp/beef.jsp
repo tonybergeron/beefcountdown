@@ -4,7 +4,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Beef Timer</title>
+		<title>Beef Countdown</title>
 		
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
@@ -64,17 +64,27 @@
 			}
 		</style>
 		
-		<script type="text/javascript">
+		<script type="text/javascript" defer="defer">
 			
 			var dateParse = 'next friday';
 			
+			var nextDate;
+			
 			$(document).ready(function(){
+				
+				createDate();
+				
 				countdown();
 				setInterval(countdown, 1000);
+				
+				function createDate() {
+					nextDate = Date.parse(dateParse).addHours(12);
+				}
+				
 				function countdown () {
 					//Get next friday with date.js
 					//http://code.google.com/p/datejs/wiki/FormatSpecifiers
-					var nextDate = Date.parse(dateParse).addHours(12);
+					
 					
 					$('#nextDate').html(nextDate);
 					
