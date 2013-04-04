@@ -11,7 +11,7 @@
 		<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"> 
 		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 		
-		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
+		<!-- <script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>  -->
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 		
 		
