@@ -7,9 +7,25 @@
 		<title>Beef Countdown</title>
 		
 		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		
+		<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"> 
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+		
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+		
+		
+		<!-- Time Slider -->
+		<link href="${pageContext.request.contextPath}/css/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css"> 
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-sliderAccess.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-timepicker-addon.js"></script>
+		
+		
+		
+		<!-- Needed because IE sucks and doesnt have canvas -->
 		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.js"></script><![endif]-->
+		
+		
 		
 
 		<style type="text/css">
@@ -70,16 +86,27 @@
 			
 			var nextDate;
 			
-			$(document).ready(function(){
+			$(function(){
 				
+				//Create the DateTime Picker Selection
+				$( "#datetimepicker" ).datetimepicker({
+					timeFormat: "hh:mm tt",
+				});
+				
+				//Legacy so old implementation of time works still
+				nextDate = Date.parse(dateParse).addHours(12);
+
+				//Get the Next Friday Date and Time
 				createDate();
 				
+				//Start the Countdown
 				countdown();
 				setInterval(countdown, 1000);
 				
-				function createDate() {
-					nextDate = Date.parse(dateParse).addHours(12);
-				}
+				
+				
+				
+				
 				
 				function countdown () {
 					//Get next friday with date.js
@@ -163,7 +190,50 @@
 					
 				}
 			});
+			
+			//Creates a Date 
+			//This one starts us off on Friday as 12pm
+			function createDate() {
 				
+				//Find a Date Day that is Friday
+				var day = nextFriday();
+				
+				//Add some time to it (12 hours)
+				var dayTime = new Date();
+				dayTime.setTime(day.getTime() + (12 * 60 * 60 * 1000));
+				//1000 milliseconds by 60 seconds by 60 minutes by 12 for 12+ hours in milliseconds
+				
+				//Set the selector to this time
+				$( "#datetimepicker" ).datetimepicker('setDate', dayTime );
+				
+			}
+			
+			//Returns Next Friday (if today is friday it will return todays friday)
+			function nextFriday(){
+				
+				var dateDay =  new Date();
+				
+				switch (dateDay.getDay()) {
+					case 0: dateDay.setDate(dateDay.getDate() + 5);
+					break;
+	
+					case 1: dateDay.setDate(dateDay.getDate() + 4);
+					break;
+	
+					case 2: dateDay.setDate(dateDay.getDate() + 3);
+					break;
+	
+					case 3: dateDay.setDate(dateDay.getDate() + 2);
+					break;
+	
+					case 4: dateDay.setDate(dateDay.getDate() + 1);
+					break;
+	
+					case 6: dateDay.setDate(dateDay.getDate() + 6);
+					break;
+				}
+				return dateDay;
+			}
 			
 			
 		</script>
@@ -230,6 +300,9 @@
 				<!--<div id="relative"></div>-->
 				<div>
 					<div style="margin: 0px auto; display: inline-block">
+						<p>
+							<input type="text" id="datetimepicker" />
+						</p>
 						<table class="time-table">
 							<tr>
 								<td><canvas id="dayCanvas" width="250" height="250"></canvas>
