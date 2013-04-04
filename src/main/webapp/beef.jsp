@@ -196,11 +196,17 @@
 			function createDate() {
 				
 				//Find a Date Day that is Friday
-				var day = nextFriday();
+				var dayTime = nextFriday().setHours(12, 0, 0, 0);
+				
+				
+				//day;
+				
+				
+				
 				
 				//Add some time to it (12 hours)
-				var dayTime = new Date();
-				dayTime.setTime(day.getTime() + (12 * 60 * 60 * 1000));
+				//var dayTime = new Date();
+				//dayTime.setTime(day.getTime() + (12 * 60 * 60 * 1000));
 				//1000 milliseconds by 60 seconds by 60 minutes by 12 for 12+ hours in milliseconds
 				
 				//Set the selector to this time
