@@ -84,6 +84,7 @@
 			
 			var dateParse = 'next friday';
 			
+			//Variable tha tis passed around holding the enxt date to perform the time on
 			var nextDate;
 			
 			$(function(){
@@ -94,7 +95,7 @@
 				});
 				
 				//Legacy so old implementation of time works still
-				nextDate = Date.parse(dateParse).addHours(12);
+				//nextDate = Date.parse(dateParse).addHours(12);
 
 				//Get the Next Friday Date and Time
 				createDate();
@@ -114,6 +115,8 @@
 					
 					
 					$('#nextDate').html(nextDate);
+				
+					nextDate = $( "#datetimepicker" ).datetimepicker('getDate');
 					
 					var nextDateYear = nextDate.toString('yyyy'); //4 digit year
 					var nextDateMonth = nextDate.toString('M'); //1 to 12
@@ -196,13 +199,10 @@
 			function createDate() {
 				
 				//Find a Date Day that is Friday
-				var dayTime = nextFriday().setHours(12, 0, 0, 0);
+				var day = getNextFriday();
 				
-				
-				//day;
-				
-				
-				
+				//set at 12pm
+				var dayTime = day.setHours(12, 0, 0, 0);
 				
 				//Add some time to it (12 hours)
 				//var dayTime = new Date();
@@ -212,10 +212,13 @@
 				//Set the selector to this time
 				$( "#datetimepicker" ).datetimepicker('setDate', dayTime );
 				
+				//Set as our NextDate for the counter!
+				nextDate = dayTime;
+				
 			}
 			
 			//Returns Next Friday (if today is friday it will return todays friday)
-			function nextFriday(){
+			function getNextFriday(){
 				
 				var dateDay =  new Date();
 				
@@ -238,6 +241,7 @@
 					case 6: dateDay.setDate(dateDay.getDate() + 6);
 					break;
 				}
+				
 				return dateDay;
 			}
 			
