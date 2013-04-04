@@ -1,0 +1,41 @@
+/* Remove margins from the 'html' and 'body' tags, and ensure the page takes up full screen height */
+html, body {height:100%; margin:0; padding:0;}
+
+/* Set the position and dimensions of the background image. */
+#page-background {position:fixed; top:0; left:0; width:100%; height:100%;}
+
+/* Specify the position and layering for the content that needs to appear in front of the background image. Must have a higher z-index value than the background image. Also add some padding to compensate for removing the margin from the 'html' and 'body' tags. */
+#content {position:relative; z-index:1; padding:10px;}
+
+#outer {
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	width: 100%;
+	height: 1px;
+	overflow: visible;
+}
+
+#inner {
+	width: 1025px;
+	height: 300px;
+	margin-left: -525px;  /***  width / 2    ***/
+	position: absolute;
+	top: 100px;          /***  height / 2    ***/
+	left: 50%;
+}
+
+
+
+.time-table td {
+	text-align:center;
+}
+
+.time-table .label {
+	font-size: 25px;
+}
+
+/* Hide the Now button in the datetimepicker*/
+.ui-datepicker-current {
+	display:none;
+}

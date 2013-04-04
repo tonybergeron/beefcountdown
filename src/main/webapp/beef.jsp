@@ -11,53 +11,18 @@
 		<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"> 
 		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 		
-		<!-- <script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>  -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
-		
 		
 		<!-- Time Slider -->
 		<link href="${pageContext.request.contextPath}/css/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css"> 
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-sliderAccess.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-timepicker-addon.js"></script>
 		
-		
-		
 		<!-- Needed because IE sucks and doesnt have canvas -->
 		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.js"></script><![endif]-->
 		
-		
-		
-
-		<style type="text/css">
-			/* Remove margins from the 'html' and 'body' tags, and ensure the page takes up full screen height */
-			html, body {height:100%; margin:0; padding:0;}
-			
-			/* Set the position and dimensions of the background image. */
-			#page-background {position:fixed; top:0; left:0; width:100%; height:100%;}
-			
-			/* Specify the position and layering for the content that needs to appear in front of the background image. Must have a higher z-index value than the background image. Also add some padding to compensate for removing the margin from the 'html' and 'body' tags. */
-			#content {position:relative; z-index:1; padding:10px;}
-			
-			#outer {
-				position: absolute;
-				top: 50%;
-				left: 0px;
-				width: 100%;
-				height: 1px;
-				overflow: visible;
-			}
-			
-			#inner {
-				width: 1025px;
-				height: 300px;
-				margin-left: -525px;  /***  width / 2    ***/
-				position: absolute;
-				top: 150px;          /***  height / 2    ***/
-				left: 50%;
-			}
-			
-		</style>
-		
+		<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css"> 
 		<!-- The above code doesn't work in Internet Explorer 6. To address this, we use a conditional comment to specify an alternative style sheet for IE 6 -->
 		<!--[if IE 6]>
 		<style type="text/css">
@@ -69,16 +34,6 @@
 		<![endif]-->
 
 
-		<!-- Style for the Tables -->
-		<style type="text/css">
-			.time-table td {
-				text-align:center;
-			}
-			
-			.time-table .label {
-				font-size: 25px;
-			}
-		</style>
 		
 		<script type="text/javascript" defer="defer">
 			
@@ -92,6 +47,10 @@
 				//Create the DateTime Picker Selection
 				$( "#datetimepicker" ).datetimepicker({
 					timeFormat: "hh:mm tt",
+					showMinute: false,
+					hourGrid: 12,
+					//timezone: 'Central',
+					//showTimezone: true
 				});
 				
 				//Legacy so old implementation of time works still
@@ -118,6 +77,8 @@
 				
 					nextDate = $( "#datetimepicker" ).datetimepicker('getDate');
 					
+					
+					
 					var nextDateYear = nextDate.toString('yyyy'); //4 digit year
 					var nextDateMonth = nextDate.toString('M'); //1 to 12
 					var nextDateDay = nextDate.toString('d');
@@ -125,10 +86,7 @@
 					var nextDateMinute = nextDate.toString('m');
 					var nextDateSecond = nextDate.toString('s');
 					
-					//console.log('year: ' + nextDateYear);
-					//console.log('month: ' + nextDateMonth);
-					//console.log('day: ' + nextDateDay);
-					//console.log('hour: ' + nextDateHour);
+					//console.log('year:' + nextDateYear + " " + 'month:' + nextDateMonth + " " + 'day:' + nextDateDay + " " + 'hour:' + nextDateHour + " " + 'minute:' + nextDateMinute);
 					
 					//var monthSpan = 12
 					//var daySpan = Date.getDaysInMonth(nextDateYear, nextDateMonth - 1); //Span for Days in Month
@@ -140,9 +98,11 @@
 					
 					//The momemnt we are in now
 					var now = moment();
+					$('#nowDate').html(moment().format());
 					
 					//The moment we are comparing against
 					var then = moment([nextDateYear, (nextDateMonth - 1), nextDateDay, nextDateHour, nextDateMinute, nextDateSecond, 0]);
+					$('#thenDate').html(then.format());
 					
 					// get the difference from now to then in ms
 					var ms = then.diff(now, 'milliseconds', true);
@@ -201,12 +161,9 @@
 				//Find a Date Day that is Friday
 				var day = getNextFriday();
 				
-				//set at 12pm
-				var dayTime = day.setHours(12, 0, 0, 0);
-				
-				//Add some time to it (12 hours)
-				//var dayTime = new Date();
-				//dayTime.setTime(day.getTime() + (12 * 60 * 60 * 1000));
+				//Resets time to 12am of today then adds 12 hours
+				var dayTime = new Date();
+				dayTime.setTime(day.setHours(0, 0, 0, 0) + (12 * 60 * 60 * 1000));
 				//1000 milliseconds by 60 seconds by 60 minutes by 12 for 12+ hours in milliseconds
 				
 				//Set the selector to this time
@@ -254,6 +211,9 @@
 				//The Time Increment by the Span need to move by
 				var timeIncrement = (2 * Math.PI) / span;
 				
+				//offset to make a sliver offset of the rotation occur for the time so 0 isnt a full circle
+				var sliverOffset = 0.005;
+				
 				//Setup the Canvas
 				var canvas = document.getElementById(canvas);
 				var context = canvas.getContext('2d');
@@ -261,8 +221,8 @@
 				var x = canvas.width / 2; //Set the x center location of the canvas
 				var y = canvas.height / 2; //set the y center location of the canvas
 				var radius = 100; //Radius of the clock
-				var startAngle = Math.PI * 1.5; //Where the angle will start
-				var endAngle = timeIncrement * time - (0.5 * Math.PI);
+				var startAngle = Math.PI * 1.5 - sliverOffset; //Where the angle will start
+				var endAngle = timeIncrement * time - (0.5 * Math.PI) + sliverOffset;
 				var counterClockwise = false; //False to CounterClockwise
 				
 				
@@ -327,6 +287,15 @@
 									<br/><span class="label">Milliseconds</span></td>-->
 							</tr>
 						</table>
+						
+						<!--
+						<div>
+							Next Friday's Date Select: <span id="nextDate"></span><br/>
+							Now: <span id="nowDate"></span><br/>
+							Then: <span id="thenDate"></span>
+						</div>
+						 -->
+						 
 					</div>
 				</div>
 				
@@ -335,12 +304,8 @@
 		</div>
 		</div>
 
-		<!--
-		<br/>
-		<div>
-		Next Friday's Date: <span id="nextDate"></span>
-		</div>
-		-->
+		
+
 		
 		
 	</body>
