@@ -54,6 +54,7 @@
 					showMinute: true,
 					hourGrid: 12,
 					minuteGrid: 15, 
+					minDate: 0,
 					onSelect: function(date) {
 						nextDate = date;
 						$("#time").countdown({'date':nextDate});
