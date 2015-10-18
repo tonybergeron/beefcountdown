@@ -25,14 +25,14 @@ html, body {height:100%; margin:0; padding:0;}
 	left: 50%;
 }
 
-
-
 .time-table td {
 	text-align:center;
 }
 
 .time-table .label {
 	font-size: 25px;
+	font-weight: bold;
+	display: none;
 }
 
 /* Hide the Now button in the datetimepicker*/

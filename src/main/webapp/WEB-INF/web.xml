@@ -24,10 +24,18 @@
 		<servlet-name>BeefServlet</servlet-name>
 		<jsp-file>/beef.jsp</jsp-file>
 	</servlet>
-	
 	<servlet-mapping>
 		<servlet-name>BeefServlet</servlet-name>
 		<url-pattern>/beef</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>DateServlet</servlet-name>
+		<jsp-file>/date.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DateServlet</servlet-name>
+		<url-pattern>/date</url-pattern>
 	</servlet-mapping>
 
 </web-app>

@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>Date Countdown</title>
+		
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+		
+		<!-- Countdown script -->
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/count.js"></script>
+		
+		<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"> 
+		<script type="text/javascript" src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+		
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/date.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/moment.min.js"></script>
+		
+		<!-- Time Slider -->
+		<link href="css/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css"> 
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-sliderAccess.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-ui-timepicker-addon.js"></script>
+		
+		<!-- Needed because IE sucks and doesnt have canvas -->
+		<!--[if IE]><script src="${pageContext.request.contextPath}/js/excanvas.js"></script><![endif]-->
+		
+		<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css"> 
+		<!-- The above code doesn't work in Internet Explorer 6. To address this, we use a conditional comment to specify an alternative style sheet for IE 6 -->
+		<!--[if IE 6]>
+		<style type="text/css">
+			html {overflow-y:hidden;}
+			body {overflow-y:auto;}
+			#page-background {position:absolute; z-index:-1;}
+			#content {position:static;padding:10px;}
+		</style>
+		<![endif]-->
+
+
+		<script type="text/javascript" defer>
+			
+			var dateParse = 'next friday';
+			
+			//Variable tha tis passed around holding the enxt date to perform the time on
+			var nextDate;
+			
+			//$( "#datetimepicker" ).datetimepicker("getDate").toString('MMMM d, yyyy HH:mm:ss');
+			
+			$(function(){
+				
+				//Create the DateTime Picker Selection
+				$( "#datetimepicker" ).datetimepicker({
+					dateFormat: "MM dd, yy",
+					timeFormat: "hh:mm tt",
+					showMinute: true,
+					hourGrid: 12,
+					minuteGrid: 15, 
+					minDate: 0,
+					onSelect: function(date) {
+						nextDate = date;
+						$("#time").countdown({'date':nextDate});
+						console.log("from the select" + nextDate);
+					},
+					minus: false,
+					//timezone: 'Central',
+					//showTimezone: true
+				});
+				
+				//Create the date!
+				createDate();
+				
+				//Watch for changes to the DateTimePicker 
+				
+				 $('#datetimepicker').change(function() {
+					//console.log("from the change " + nextDate);
+					
+					//ONLY NEEDED IF THE INPUT ISNT READONLY
+					nextDate = $( "#datetimepicker" ).datetimepicker( "getDate" ).toString('MMMM d, yyyy HH:mm:ss');
+					
+					$("#time").countdown({'date':nextDate});
+				}); 
+				
+				$("#time").countdown({
+					date: nextDate,
+					htmlTemplate: "<span class='digets' id='days'>%d</span><span class='cd-time'> : </span> <span class='digets' id='hours'>%h</span> <span class='cd-time'> : </span> <span class='digets' id='minutes'>%i</span> <span class='cd-time'> : </span> <span class='digets' id='seconds'>%s</span> <span class='cd-time'></span>",
+					offset: -5.0,
+					minus:false,
+					//servertime: 1365288149000,
+					onChange: function( event, timer ){
+						//The timer has updated so we need to set the times. 
+						if( !timer.hasCompleted) {
+							updateDisplay(timer.daysLeft, timer.hrsLeft, timer.minsLeft, timer.secLeft);
+						} else {
+							updateDisplay('0', '0', '0', '0');
+						}
+					},
+					onComplete: function( event ){
+						//$("#time").removeData('jcdData');
+						$("#time").countdown({
+							date: "april 26, 2013 12:00:00",
+							onComplete: function( event ) {
+								$(this).html("");
+								$('.countdown-caption').html("");
+							},
+							leadingZero: true
+						});
+					},
+					leadingZero: true
+				});
+				
+			});
+			
+			function getUrlVars() {
+			    var vars = [], hash;
+			    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			    for(var i = 0; i < hashes.length; i++)
+			    {
+			        hash = hashes[i].split('=');
+			        vars.push(hash[0]);
+			        vars[hash[0]] = hash[1];
+			    }
+			    return vars;
+			}
+			
+			/**
+			 * @description Pull date (2015-10-17T23:06:37-05:00 format) from query param
+			 * @example yyyy-mm-ddThh:mm:ssz
+			 */
+			function createDate() {
+				
+				//Find the Date as indicated by the query-param 'datatime
+				var datetime = getUrlVars().datetime;
+
+				// Use moment to parse then turn to date object
+				var dayTime = moment(datetime).toDate();
+				
+				//Set the selector to this time
+				$( "#datetimepicker" ).datetimepicker('setDate', dayTime );
+				
+				//Set as our NextDate for the counter!
+				nextDate = dayTime.toString('MMMM d, yyyy HH:mm:ss');
+				
+				//console.log(nextDate.toString('MMMM d, yyyy HH:mm:ss'));
+				
+				//$('#nextDate').html(nextDate);
+				
+			}
+			
+			
+			function updateDisplay(days, hours, minutes, seconds) {
+				//console.log('From the UpdateDisplay: ' + $( "#datetimepicker" ).datetimepicker( "getDate" ).toString('MMMM d, yyyy HH:mm:ss'));
+				//console.log('From the UpdateDisplay: ' + days + ' ' + hours + ' ' + minutes + ' ' + seconds);
+				var daySpan = 7; //Span for 1 week, 7 days total
+				var hourSpan = 24;
+				var minuteSpan = 60;
+				var secondSpan = 60;
+				var millisecondSpan = 1000;
+				
+				incrementTime(days, daySpan, "dayCanvas");
+				incrementTime(hours, hourSpan, "hourCanvas");
+				incrementTime(minutes, minuteSpan, "minuteCanvas");
+				incrementTime(seconds, secondSpan, "secondCanvas");
+			}
+			
+			
+		</script>
+		
+		<script type="text/javascript">
+			
+			function incrementTime(time, span, canvas) {
+				//The Time Increment by the Span need to move by
+				var timeIncrement = (2 * Math.PI) / span;
+				
+				//offset to make a sliver offset of the rotation occur for the time so 0 isnt a full circle
+				var sliverOffset = 0.005;
+				
+				//Setup the Canvas
+				var canvas = document.getElementById(canvas);
+				var context = canvas.getContext('2d');
+				context.clearRect(0,0,350,350); //Clear the Rectangle
+				var x = canvas.width / 2; //Set the x center location of the canvas
+				var y = canvas.height / 2; //set the y center location of the canvas
+				var radius = 110; //Radius of the clock
+				var startAngle = Math.PI * 1.5 - sliverOffset; //Where the angle will start
+				var endAngle = timeIncrement * time - (0.5 * Math.PI) + sliverOffset;
+				var counterClockwise = false; //False to CounterClockwise
+				
+				
+				//Draw our arc for the timer!
+				context.beginPath(); //Start drawing
+				context.arc(x, y, radius, startAngle, endAngle, counterClockwise); //Draw the arc
+				var arcWidth = 15;
+				context.lineWidth = arcWidth; //Width of the arc line
+				context.strokeStyle = '#3B6DCC'; //Color of the line
+				context.stroke(); //STROKE!!! write it to the canvas
+				
+				
+				//create the container for the clock
+				context.beginPath();
+				context.arc(x, y, radius + (arcWidth/2), 0, 2 * Math.PI, counterClockwise); //Draw the arc
+				context.lineWidth = 4; //Width of the arc line
+				context.strokeStyle = 'black'; //Color of the line
+				context.stroke(); //STROKE!!! write it to the canvas
+				context.beginPath();
+				context.arc(x, y, radius - (arcWidth/2), 0, 2 * Math.PI, counterClockwise); //Draw the arc
+				context.lineWidth = 4; //Width of the arc line
+				context.strokeStyle = 'black'; //Color of the line
+				context.stroke(); //STROKE!!! write it to the canvas
+				
+				
+				//Add Text in the center of the circle
+				context.font="70.4px Arial";
+      			context.fillStyle = 'black';
+				context.textAlign="center";
+				context.textBaseline = 'middle';
+				
+				context.fillText(time,x,y);
+			}
+		</script>
+		
+	</head>
+	<body style="background: url('${pageContext.request.contextPath}/resources/chicago-picture-1.jpg') no-repeat center center fixed; background-size: cover;">
+		<div id="content">
+		<div id="outer">
+		<div id="inner">
+			<div  style="margin: 0px auto;text-align:center;">
+				<!--<h1>Time Until Next Beef!</h1>-->
+				<!--<div id="relative"></div>-->
+				<div>
+					<div style="margin: 0px auto; display: inline-block">
+						
+						<table class="time-table">
+							<tr>
+								<td><canvas id="dayCanvas" width="250" height="250"></canvas>
+									<br/><span class="label">Days</span></td>
+								<td><canvas id="hourCanvas" width="250" height="250"></canvas>
+									<br/><span class="label">Hours</span></td>
+								<td><canvas id="minuteCanvas" width="250" height="250"></canvas>
+									<br/><span class="label">Minutes</span></td>
+								<td><canvas id="secondCanvas" width="250" height="250"></canvas>
+									<br/><span class="label">Seconds</span></td>
+								<!--<td><canvas id="millisecondCanvas" width="250" height="250"></canvas>
+									<br/><span class="label">Milliseconds</span></td>-->
+							</tr>
+						</table>
+						<p>
+							<input type="text" id="datetimepicker" style="display:none;" readonly/>
+						</p>
+						<!--
+						<div>
+							Next Friday's Date Select: <span id="nextDate"></span><br/>
+							Now: <span id="nowDate"></span><br/>
+							Then: <span id="thenDate"></span>
+						</div>
+						 -->
+						 
+						<div class="time" id="time" style="display:none;"></div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		</div>
+		</div>
+	</body>
+</html>
